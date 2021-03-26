@@ -1,0 +1,48 @@
+{
+  "name": "coursespace",
+  "version": "1.0.0",
+  "description": "Is a app to studies",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack ./src/index.js --mode development",
+    "start": "webpack serve",
+    "lint": "eslint --fix",
+    "deploy": "firebase deploy"
+  },
+  "author": "DSPP",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "babel-polyfill": "^6.26.0",
+    "css-loader": "^5.1.3",
+    "eslint": "^7.22.0",
+    "eslint-plugin-react": "^7.23.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.1",
+    "style-loader": "^2.0.0",
+    "svg-url-loader": "^7.1.1",
+    "webpack": "^5.27.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "firebase": "^8.3.1",
+    "history": "^5.0.0",
+    "particlesjs": "^2.2.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.2.0",
+    "react-particles-js": "^3.4.1",
+    "react-redux": "^7.2.3",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-transition-group": "^4.4.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.2.1"
+  }
+}
