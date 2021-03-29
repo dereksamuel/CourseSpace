@@ -57,7 +57,9 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
     const newUser = {
       "email": formData.get("email"),
       "password": formData.get("password"),
+      "rememberMe": formData.get("remember"),
     };
+
     const result = await fb.auth().signInWithEmailAndPassword(newUser.email, newUser.password).catch((error) => {
       console.error(error);
       setError("Ha ocurrido un error");
@@ -75,8 +77,10 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
         clearTimeout(timeout);
       }, 4000);
     }
-    else
+    else {
+      localStorage.setItem("rememberMe", newUser.rememberMe);
       history.push("/");
+    }
   };
 
   const loginActionGoogle = () => {

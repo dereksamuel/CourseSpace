@@ -7,10 +7,11 @@ import Header from "../Header/index.jsx";
 
 function Courses({ authenticate, createCourse, getCourses, courses: coursesData }) {
   useEffect(() => {
+    if (!fb.auth().currentUser) return;//FIXME: Arrégla esto por doble consulta a base de datos al sign out
     getCourses();
   }, []);
   let toSave = {
-    uid: authenticate.user.uid,
+    uid: authenticate?.user?.uid,
     course_id: "xiopaaasssssss",
   };
 
@@ -20,9 +21,12 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
       <h1>Hello Home</h1>
       <button onClick={() => createCourse(toSave)}>Create "course"</button>
       {
-        coursesData.courses?.forEach((course) => (
-          <li key={course.id}>{course.course_id}</li>
-        )) || "No hay cursos"
+        coursesData.courses?.map((course) => {
+          console.log(course);
+          return (
+            <li key={course.id}>{course.course_id}</li>
+          );
+        }) || "No hay cursos"
       }
       <button onClick={() => fb.auth().signOut()}>SignOut</button>
     </div>

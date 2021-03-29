@@ -23,9 +23,13 @@ export const getCourses = () => (dispatch) => {
   db.collection("courses").onSnapshot((querySnapshot) => {
     if (querySnapshot.empty) {}
     else {
+      const dataPayload = [];
+      querySnapshot.forEach((doc) =>
+        dataPayload.push(doc.data())
+      );
       dispatch({
         type: "get_all",
-        payload: querySnapshot.docs,
+        payload: dataPayload,
       });
     }
   });
