@@ -5,6 +5,6 @@ export default {
   color_light: "#EE4540",
   color_success_bg: "#F8FCB9",
   color_success_txt: "#A7AE40",
-  color_white: "#FFEFF1",
+  color_white: "#FFEFFd",
   color_gray_input: "#EBEBEB",
 }

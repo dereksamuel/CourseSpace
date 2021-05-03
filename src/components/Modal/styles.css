@@ -1,0 +1,14 @@
+.showMe-enter {
+  opacity: 0;
+}
+.showMe-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.showMe-exit {
+  opacity: 1;
+}
+.showMe-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

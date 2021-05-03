@@ -10,9 +10,11 @@ import PrivateRoute from "./components/Auth/PrivateRoutes.jsx";
 import Courses from "./components/Courses/index.jsx";
 
 function App({ setLoading, getAll, loading }) {
-  if (!!!localStorage.getItem("rememberMe")) fb.auth().signOut();
-
   useEffect(async () => {
+    if (localStorage.getItem("rememberMe") === "false") {
+      localStorage.removeItem("rememberMe");
+      fb.auth().signOut();
+    }
     fb.auth().onAuthStateChanged((response) => {
       if (response && !response?.emailVerified) return;
       getAll(response);

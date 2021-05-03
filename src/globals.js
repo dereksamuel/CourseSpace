@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import ChackImage from "./assets/check.png";
+import vars from "./components/vars";
 
 export const GlobalStyles = createGlobalStyle`
   * {
@@ -100,6 +101,115 @@ export const GlobalStyles = createGlobalStyle`
   }
   .display_visible {
     display: initial;
+  }
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  .tooltip .tiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 3px;
+      padding: 6px 0;
+      position: absolute;
+      z-index: 1;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+  .tooltip .tiptext::after {
+      content: "";
+      position: absolute;
+      border-width: 5px;
+      border-style: solid;
+  }
+  .tooltip:hover .tiptext {
+      visibility: visible;
+  }
+
+  .tooltip:focus .tiptext {
+      visibility: visible;
+  }
+
+  .tooltip.top .tiptext{
+      margin-left: -60px;
+      bottom: 150%;
+      left: 50%;
+  }
+  .tooltip.top .tiptext::after{
+      margin-left: -5px;
+      top: 100%;
+      left: 50%;
+      border-color: #2E2E2E transparent transparent transparent;
+  }
+
+  .tooltip.bottom .tiptext{
+      margin-left: -60px;
+      top: 150%;
+      left: 50%;
+  }
+  .tooltip.bottom .tiptext::after{
+      margin-left: -5px;
+      bottom: 100%;
+      left: 50%;
+      border-color: transparent transparent #2E2E2E transparent;
+  }
+
+  .tooltip.left .tiptext{
+      top: -5px;
+      right: 110%;
+  }
+  .tooltip.left .tiptext::after{
+      margin-top: -5px;
+      top: 50%;
+      left: 100%;
+      border-color: transparent transparent transparent #2E2E2E;
+  }
+
+  .tooltip.right .tiptext{
+      top: -5px;
+      left: 110%;
+  }
+  .tooltip.right .tiptext::after{
+      margin-top: -5px;
+      top: 50%;
+      right: 100%;
+      border-color: transparent #2E2E2E transparent transparent;
+  }
+
+  .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .custom-file-input::before {
+    content: 'Selecciona una foto';
+    transition: background 1s all;
+    display: inline-block;
+    background: linear-gradient(0deg, ${vars.color_semidark} 0%, ${vars.color_dark} 100%);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 10pt;
+    color: white;
+  }
+  .custom-file-input:hover::before {
+    border-color: black;
+  }
+  .custom-file-input:active::before {
+    background: linear-gradient(0deg, ${vars.color_dark} 0%, ${vars.color_semidark} 100%);
+  }
+
+  .imageLoaded {
+    max-width: 277px;
+    min-height: 166px;
+    object-fit: cover;
+    object-position: center;
   }
 
   @media screen and (min-width: 768px) {

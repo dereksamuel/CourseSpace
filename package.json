@@ -4,7 +4,7 @@
   "description": "Is a app to studies",
   "main": "index.js",
   "scripts": {
-    "build": "webpack ./src/index.js --mode development",
+    "build": "webpack ./src/index.js --mode production",
     "start": "webpack serve",
     "lint": "eslint --fix",
     "deploy": "firebase deploy"

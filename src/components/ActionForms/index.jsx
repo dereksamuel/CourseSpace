@@ -9,6 +9,7 @@ import particlesJson from "../../helpers/particlesjs-config.json";
 import fb from "../../helpers/firebase_config";
 import { withRouter, Redirect } from "react-router";
 import { connect } from "react-redux";
+import Modal from "../Modal/index.jsx";
 
 function ActionForms({ register = false, iconpre, iconpos, history, user }) {
   const [modeRegister, setModeRegister] = useState(false);
@@ -17,19 +18,30 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
   const [name, setName] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showMe, setShowMe] = useState(false);
+  const [emailAddress, setEmailAddress] = useState(null);
+  const [textButtonSend, setTextButtonSend] = useState("enviar");
+  const [variantEmail, setVariantEmail] = useState("default");
   const form = useRef(null);
 
   const handleChangeEmail = (e) => setEmail(e.target.value);
   const handleChangePassword = (e) => setPassword(e.target.value);
   const handleChangeName = (e) => setName(e.target.value);
+  const handleChangeSendEmail = (e) => setEmailAddress(e.target.value);
+  const handleCheck = (e) => {
+    const value = e.target.value;
+    if (value === "on") localStorage.setItem("rememberMe", true);
+    else localStorage.setItem("rememberMe", false);
+  };
 
   const registerAction = async (e) => {
     setLoading(true);
     e.preventDefault();
+    const checkInput = document.querySelector("#rememberMe");
     const config = {
       url: "http://localhost:8080/",
     };
-    console.log(email, password, name);
+    console.log(checkInput);
     try {
       const result = await fb.auth().createUserWithEmailAndPassword(email, password);
       result.user.updateProfile({
@@ -48,6 +60,37 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
       setLoading(false);
       clearTimeout(timeout);
     }, 6000);
+  };
+
+  const sendPasswordVerification = (e) => {
+    e.preventDefault();
+    if (!emailAddress) {
+      setTextButtonSend("El campo de su correo es requerido");
+      const timeout = setTimeout(() => {
+        setTextButtonSend("enviar");
+        clearTimeout(timeout);
+      }, 3000);
+      return;
+    }
+    console.log(emailAddress);
+    fb.auth().sendPasswordResetEmail(emailAddress).then(function() {
+      setVariantEmail("success");
+      setTextButtonSend("correo enviado");
+      const timeout = setTimeout(() => {
+        setTextButtonSend("enviar");
+        setVariantEmail("default");
+        clearTimeout(timeout);
+      }, 3000);
+    }).catch(function(error) {
+      console.error(error);
+      setVariantEmail("error");
+      setTextButtonSend("ocurrió un error");
+      const timeout = setTimeout(() => {
+        setTextButtonSend("enviar");
+        setVariantEmail("default");
+        clearTimeout(timeout);
+      }, 3000);
+    });
   };
 
   const loginAction = async (e) => {
@@ -78,7 +121,7 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
       }, 4000);
     }
     else {
-      localStorage.setItem("rememberMe", newUser.rememberMe);
+      if (!!!newUser.rememberMe) localStorage.setItem("rememberMe", false);
       history.push("/");
     }
   };
@@ -87,6 +130,8 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
     const provider = new fb.auth.GoogleAuthProvider();
     fb.auth().signInWithPopup(provider)
       .then(() => {
+        if (!!!localStorage.getItem("rememberMe")) localStorage.setItem("rememberMe", false);
+        else localStorage.setItem("rememberMe", true);
         history.push("/");
       })
       .catch((error) => {
@@ -105,6 +150,35 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
 
   return (
     <>
+      <Modal
+        showMe={showMe}
+        setShowMe={setShowMe}
+        title="Recuperar Contraseña"
+        buttons
+        secondButton={
+          <Button
+            disabled={textButtonSend === "enviar" ? false : true}
+            size_f="1rem"
+            padding="0.8rem 1.5rem"
+            onClick={sendPasswordVerification}
+            type="submit"
+            form="modalSend"
+            variant={variantEmail}>
+            {textButtonSend}
+          </Button>
+        }
+        >
+        <form id="modalSend">
+          <p style={{ maxWidth: "350px", textAlign: "center", }}>
+            Por favor envíanos tu correo electrónico,
+            en él le mandaremos un correo de verificación.
+            Puede escribirlo aquí:
+          </p>
+          <Input style={{ margin: "0 10px", marginTop: "1rem", fontSize: "0.6rem", }}>
+            <input type="text" placeholder="Correo electrónico" name="email" onChange={handleChangeSendEmail} required />
+          </Input>
+        </form>
+      </Modal>
       <Particles
         style={{ position: "fixed", top: "0", bottom: "0", }}
         params={particlesJson}
@@ -135,13 +209,13 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
                   </Input>
                   <div className="flex">
                     <p>
-                      <input type="checkbox" name="remember" id="rememberMe" />
+                      <input type="checkbox" name="remember" id="rememberMe" onChange={handleCheck} />
                       <label htmlFor="rememberMe">Recordarme</label>
                     </p>
-                    <a href="#">¿olvidó su contraseña?</a>
+                    <a href="#" onClick={() => setShowMe(true)}>¿olvidó su contraseña?</a>
                   </div>
                   <div className="center_container">
-                    <Button padding="1.5rem" size_f="1.4rem" type="submit" onClick={loginAction}>{ error ? error : loading ? "Loading" : "Iniciar Sesión" }</Button>
+                    <Button padding="1.5rem" size_f="1.4rem" type="submit" onClick={loginAction}>{ error ? error : loading ? "Cargando" : "Iniciar Sesión" }</Button>
                     <Button
                       padding="1rem"
                       size_f="1rem"
@@ -181,7 +255,7 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
                     <i>{iconpos}</i>
                   </Input>
                   <div className="center_container">
-                    <Button type="submit" padding="1.5rem" size_f="1.4rem" onClick={registerAction} disabled={!email || !password || !name}>{error ? error : loading ? "Loading" : "Regitrarse"}</Button>
+                    <Button type="submit" padding="1.5rem" size_f="1.4rem" onClick={registerAction} disabled={!email || !password || !name}>{error ? error : loading ? "Cargando" : "Registrarse"}</Button>
                     <Button
                       padding="1rem"
                       size_f="1rem"

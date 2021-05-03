@@ -36,6 +36,7 @@ export const Layout = styled.header`
         padding-bottom: 1rem;
         padding-left: 1rem;
         padding-top: 1rem;
+        margin: 0 1rem;
       }
     }
     padding: 1rem;
@@ -53,7 +54,15 @@ export const Layout = styled.header`
     }
   }
   
+  .menuItem {
+    display: initial !important;
+  }
+  
   @media screen and (min-width: 768px) {
+    .menuItem {
+      display: none !important;
+    }
+
     .display_none {
       display: initial;
     }
@@ -78,6 +87,7 @@ export const Layout = styled.header`
           padding-bottom: 0;
           padding-left: 0;
           padding-top: 0;
+          margin: 0 5px;
         }
       }
     }

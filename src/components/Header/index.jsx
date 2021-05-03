@@ -5,9 +5,20 @@ import Logo from "../../assets/logo_lg.svg";
 import LogoSM from "../../assets/logo_sm.svg";
 import DefaultUserImage from "../../assets/default_user.svg";
 import { Link } from "react-router-dom";
-import { FaEllipsisV } from "react-icons/fa";
+import { FaEllipsisV, FaStepBackward } from "react-icons/fa";
+import "./styles.css";
 
 function Header({ user }) {
+  const showMenu = () => {
+    const menu =document.querySelector(".right");
+    menu.classList.remove("display_none");
+  };
+
+  const showMenuBack = () => {
+    const menu =document.querySelector(".right");
+    menu.classList.add("display_none");
+  };
+
   return (
     <Layout>
       <section className="Header_1">
@@ -26,8 +37,9 @@ function Header({ user }) {
           </Link>
 
           <div>
-            <div style={{ color:"#fff", fontSize: "1.4rem", paddingRight: "1rem", }}><FaEllipsisV></FaEllipsisV></div>
+            <div className="menuItem" style={{ color:"#fff", fontSize: "1.4rem", paddingRight: "1rem" }} onClick={showMenu}><FaEllipsisV></FaEllipsisV></div>
             <div className="right display_none">
+              <p className="menuItem" onClick={showMenuBack} style={{ display: "flex", alignItems: "center", color: "white", }}>Atrás <FaStepBackward /></p>
               <Link to="/">Cursos</Link>
               <Link to="/analytics">Analíticas</Link>
               <Link to="/works">Tareas</Link>
