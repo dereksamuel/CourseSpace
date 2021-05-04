@@ -20,15 +20,19 @@ export const createCourse = (toSave) => async (dispatch) => {
 };
 
 export const getCourses = () => (dispatch) => {
-  db.collection("courses")
+  return db.collection("courses")
   .orderBy("date", "asc")
   .where("uid", "==", fb.auth().currentUser.uid)
   .onSnapshot((querySnapshot) => {
-    if (querySnapshot.empty) {}
+    if (querySnapshot.empty) {
+    }
     else {
       const dataPayload = [];
       querySnapshot.forEach((doc) =>
-        dataPayload.push(doc.data())
+        dataPayload.push({
+          ...doc.data(),
+          id: doc.id,
+        })
       );
       dispatch({
         type: "get_all",

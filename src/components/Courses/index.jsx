@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { FaPlus, FaFile, FaCalendar, FaCameraRetro, FaTimes } from "react-icons/fa";
 import fb, { storage } from "../../helpers/firebase_config";
 import { connect } from "react-redux";
 import * as actionsCourses from "../../actions/courses";
 import { Form, Button } from "../styles";
+import { Close } from '../Courses/styles';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-import Header from "../Header/index.jsx";
 import Loader from '../Loader/index.jsx';
 import Modal from "../Modal/index.jsx";
-import { Close } from './styles';
+import Card from "../Card/index.jsx";
 
 function Courses({ authenticate, createCourse, getCourses, courses: coursesData }) {
   const [visible, setVisible] = useState(false);
@@ -22,24 +22,60 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
   const ref = useRef(null);
   let toSave = {
     uid: authenticate?.user?.uid,
-    date: fb.firestore.FieldValue.serverTimestamp(),
     photoURL: "",
   };
+  const observer = new IntersectionObserver(entries => {
+    for (const { target, isIntersecting } of entries) {
+      if (isIntersecting) {
+        if (target.dataset.src)
+          target.setAttribute('src', target.dataset.src);
+        target.setAttribute('style', 'opacity: 1; object-fit: scale-down;');
+      } else {
+        target.removeAttribute('src');
+        target.setAttribute('style', 'opacity: 0;');
+      }
+    }
+  })
+
+  const functionCallback = useCallback(() => {
+    const imgs = document.querySelectorAll('img.carousel-item__img');
+
+    imgs.forEach(img => {
+      console.log(observer);
+      observer.observe(img);
+    });
+  });
 
   useEffect(() => {
     if (!fb.auth().currentUser) return;//FIXME: Arrégla esto por doble consulta a base de datos al sign out
     getCourses();
+    functionCallback();
   }, []);
 
   const signOut = () => {
     localStorage.removeItem("rememberMe");
     fb.auth().signOut();
   };
+
   const handleChangeDate = (e) => {
-    setAddDate(false);
-    setDate(e.target.value);
+    setAddDate(e.target.value);
+    const dateNow = new Date(e.target.value);
+    const day = dateNow.getDay()
+    const hours = dateNow.getHours().toLocaleString();
+    const minutes = dateNow.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    var weekday = new Array(7);
+    weekday[0] = "domingo";
+    weekday[1] = "lunes";
+    weekday[2] = "martes";
+    weekday[3] = "miércoles";
+    weekday[4] = "jueves";
+    weekday[5] = "viernes";
+    weekday[6] = "sábado";
+    setDate(`Estudia el ${weekday[day]} a las ${hours === 0 ? 12 : hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`);
   }
-  const addStorage = () => {
+
+  const addStorage = (toSave) => {
     const ref = storage.ref(`imgsCourses/${fb.auth().currentUser.uid}/${file.name}`);
     const task = ref.put(file);
 
@@ -54,6 +90,10 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
       .then((url) => {
         setStatus("");
         sessionStorage.setItem("photoURL", url);
+        toSave.photoURL = url;
+        createCourse(toSave);
+        setStateButton("Guardar");
+        closeModal();
       })
       .catch((err) => {
         console.error(err);
@@ -61,23 +101,28 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
       });
     })
   };
+  
   const handleCreateCourse = (e) => {
     e.preventDefault();
-    addStorage();
+    setStateButton("Cargando");
     const form = new FormData(ref.current);
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      toSave.photoURL = sessionStorage.getItem("photoURL");
-      toSave = {
-        ...toSave,
-        "fullname": form.get("fullname"),
-        "description": form.get("description"),
-      }
+    toSave.date = addDate;
+    toSave = {
+      ...toSave,
+      "fullname": form.get("fullname"),
+      "description": form.get("description"),
+    }
+    console.log(toSave, addDate);
+    if (file)
+      addStorage(toSave);
+    else {
+      setStatus("");
       createCourse(toSave);
-      setStateButton("Cargando");
+      setStateButton("Guardar");
       closeModal();
-    }, 2000);
+    }
   };
+
   const handleSetVisible = (value) => setVisible(value);
   const handleChangeFile = (e) => {
     setStatus("Cargando");
@@ -86,6 +131,7 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
     sessionStorage.setItem("urlPreview", URL.createObjectURL(e.target.files[0]));
     setStatus("Listo");
   };
+
   const closeModal = () => {
     handleSetVisible(false);
     setAddPhoto(false);
@@ -95,10 +141,25 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
     setStatus("Selecciona una foto");
   };
 
+  if (coursesData.courses.length) {
+    const functionTimeout = () => {
+      const timeout = setTimeout(() => {
+        const xImages = document.querySelectorAll('img.carousel-item__img');
+        functionCallback();
+        if (!xImages.length) {
+          clearTimeout(timeout);
+          functionTimeout();
+        }
+        clearTimeout(timeout);
+      }, 10);
+    }
+
+    functionTimeout();
+  }
+
   return (
     <div>
       <Modal></Modal>
-      <Header />
       <div style={{ maxWidth: "500px", margin: "2rem auto", padding: "0 2rem", }}>
         <Form
           style={visible ? { transition: "1s", } : { cursor: "pointer", transition: "1s", }}
@@ -120,12 +181,15 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
                   <Close onClick={closeModal}>
                     <FaTimes className="closeIcon"></FaTimes>
                   </Close>
-                  { date }
                   {
                     addDate &&
-                    <label>
-                      <input type="date" onChange={handleChangeDate} />
-                    </label>
+                      <span className="datepicker-toggle">
+                        <span className="datepicker-toggle-button">
+                          <FaCalendar></FaCalendar>
+                          <p>{date ? date : "Selecciona la fecha"}</p>
+                        </span>
+                        <input type="datetime-local" className="datepicker-input" onChange={handleChangeDate} />
+                      </span>
                   }
                   {
                     addPhoto &&
@@ -133,7 +197,7 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
                         {
                           file ? <img src={ sessionStorage.getItem("urlPreview") } alt="image loaded" className="imageLoaded" />
                           : <>
-                            <input type="file" onChange={handleChangeFile} class="custom-file" style={{ maxWidth: "150px", }} />
+                            <input type="file" onChange={handleChangeFile} className="custom-file" style={{ maxWidth: "150px", }} />
                             { status !== "Cargando"
                               ? <>
                                 <FaCameraRetro/>
@@ -145,29 +209,45 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
                       </label>
                   }
                   <div>
-                    <input name="fullname" type="text" placeholder="Nombre completo del curso" style={{ fontWeight: "500", }} />
-                    <textarea name="description" type="text" placeholder="Añadir una descripción. . ." style={{ fontSize: "1rem", minHeight: "150px", }} />
+                    <input required name="fullname" type="text" placeholder="Nombre completo del curso" style={{ fontWeight: "500", }} />
+                    <textarea name="description" type="text" placeholder="Añadir una descripción. . ." style={{ fontSize: "1rem", minHeight: "100px", }} />
                   </div>
                   <div className="icons">
                     <section>
                       <i className="tooltip top">
-                        <FaFile onClick={() => {
-                          if (screen.width > 768) {
-                            return setAddPhoto(true);
-                          }
-                        }} />
-                        <span className="tiptext" onClick={() => setAddPhoto(true)}>Añadir una foto</span>
+                        {
+                          !addPhoto ? <FaFile onClick={() => {
+                            if (screen.width > 768) {
+                              return setAddPhoto(true);
+                            }
+                          }} /> : <FaTimes className="closeIcon" onClick={() => {
+                            if (screen.width > 768) {
+                              return setAddPhoto(false);
+                            }
+                          }}></FaTimes>
+                        }
+                        <span className="tiptext" onClick={() => {
+                          return addPhoto ? setAddPhoto(false) : setAddPhoto(true);
+                        }}>{!addPhoto ? "Añadir" : "Quitar"} foto</span>
                       </i>
                       <i className="tooltip top">
-                        <FaCalendar onClick={() => {
-                          if (screen.width > 768) {
-                            return setAddDate(true);
-                          }
-                        }} />
-                        <span className="tiptext" onClick={() => setAddDate(true)}>Añadir la hora de estudio</span>
+                        {
+                          !addDate ? <FaCalendar onClick={() => {
+                            if (screen.width > 768) {
+                              return setAddDate(true);
+                            }
+                          }} /> : <FaTimes className="closeIcon" onClick={() => {
+                            if (screen.width > 768) {
+                              return setAddDate(false);
+                            }
+                          }}></FaTimes>
+                        }
+                        <span className="tiptext" onClick={() => {
+                          return addDate ? setAddDate(false) : setAddDate(true);
+                        }}>{!addDate ? "Añadir" : "Quitar"} la hora de estudio</span>
                       </i>
                     </section>
-                    <Button size_f="1rem" padding="1rem">{stateButton}</Button>
+                    <Button size_f="1rem" padding="1rem" disabled={stateButton !== "Guardar"}>{stateButton}</Button>
                   </div>
                 </section>
                 : <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
@@ -179,18 +259,21 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
           </TransitionGroup>
         </Form>
       </div>
-      {
-        coursesData.courses?.map((course) => {
-          console.log(course);
-          return (
-            <li key={course.id}>
-              <img src={course.photoURL} alt={course.fullname} />
-              {course.fullname}
-              <p>{course.description}</p>
-            </li>
-          );
-        }) || "No hay cursos"
-      }
+      <ul className="ulListCards" style={{
+        padding: "0 2rem",
+        display: "flex",
+        alignItems: "flex-start",
+        flexWrap: "wrap",
+        justifyContent: "start",
+      }}>
+        {
+          coursesData.courses?.map((course) => {
+            return (
+              <Card item={course} key={course.id} />
+            );
+          }) || "No hay cursos"
+        }
+      </ul>
       <button onClick={signOut}>SignOut</button>
     </div>
   )
@@ -201,4 +284,4 @@ const mapStateToProps = (reducers) => ({
   courses: reducers.courses,
 })
 
-export default connect(mapStateToProps, actionsCourses)(Courses);
+export default connect(mapStateToProps, actionsCourses)(memo(Courses));

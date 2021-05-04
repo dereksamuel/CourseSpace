@@ -20,6 +20,48 @@ export const Form = styled.form`
     background-color: rgb(226 226 226);
     transition: padding 1s all;
   }
+  .datepicker-toggle {
+    display: inline-block;
+    position: relative;
+    width: 300px;
+    height: 30px;
+    color: #665959;
+  }
+  .datepicker-toggle p {
+    display: inline-block;
+    margin-left: 1rem;
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+  }
+  .datepicker-toggle-button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .datepicker-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .datepicker-input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+  }
   .imageContainer {
     min-height: 166px;
     background-color: rgb(68, 46, 60);

@@ -1,5 +1,32 @@
 import styled from "styled-components";
 
+export const Card = styled.div`
+  background: #ebebeb;
+  max-width: 350px;
+  width: 100%;
+  list-style: none;
+  padding: 1rem;
+  border-radius: 15px;
+  border: 1px solid #cbcbcb;
+  color: gray;
+  margin: 1rem;
+  & img {
+    width: 100%;
+    border-radius: 15px;
+    max-height: 200px;
+    object-fit: contain;
+    background: #442e3c;
+    min-width: 100%;
+    min-height: 201px;
+    transition: 1s opacity;
+  }
+  .Title {
+    font-size: 1.2rem;
+    color: #737373;
+    margin: 0.5rem 0;
+  }
+`;
+
 export const Close = styled.div`
   position: relative;
   font-size: 1.4rem;

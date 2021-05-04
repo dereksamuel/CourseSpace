@@ -219,4 +219,10 @@ export const GlobalStyles = createGlobalStyle`
       }
     }
   }
+
+  @media screen and (max-width: 850px) {
+    .ulListCards {
+      justify-content: center !important;
+    }
+  }
 `;
