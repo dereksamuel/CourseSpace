@@ -9,7 +9,16 @@ export const Card = styled.div`
   border-radius: 15px;
   border: 1px solid #cbcbcb;
   color: gray;
-  margin: 1rem;
+  margin: 1.5rem;
+  /* content: "";
+    background: white;
+    color: #310d00;
+    min-width: 100%;
+    padding: 1rem;
+    height: 20px;
+    position: absolute;
+    top: -38px;
+    left: 0; */
   & img {
     width: 100%;
     border-radius: 15px;
@@ -24,6 +33,31 @@ export const Card = styled.div`
     font-size: 1.2rem;
     color: #737373;
     margin: 0.5rem 0;
+  }
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    height: 25px;
+  }
+  .icon {
+    border-radius: 50%;
+    padding: 0.5rem;
+    opacity: 0;
+    transition: 0.5s all;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &:hover .icon, &:focus .icon {
+    background: #ffffff;
+    opacity: 1;
+  }
+  .icon:focus, .icon:active {
+    background: #b8b9b9;
   }
 `;
 

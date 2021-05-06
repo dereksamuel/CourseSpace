@@ -36,7 +36,7 @@ export const Layout = styled.header`
         padding-bottom: 1rem;
         padding-left: 1rem;
         padding-top: 1rem;
-        margin: 0 1rem;
+        padding: 0 1.3rem;
       }
     }
     padding: 1rem;

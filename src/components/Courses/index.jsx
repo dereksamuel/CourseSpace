@@ -31,7 +31,8 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
           target.setAttribute('src', target.dataset.src);
         target.setAttribute('style', 'opacity: 1; object-fit: scale-down;');
       } else {
-        target.removeAttribute('src');
+        if (target.dataset.src)
+          target.removeAttribute('src');
         target.setAttribute('style', 'opacity: 0;');
       }
     }
@@ -222,6 +223,9 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
                             }
                           }} /> : <FaTimes className="closeIcon" onClick={() => {
                             if (screen.width > 768) {
+                              setFilePrevious(false);
+                              sessionStorage.removeItem("urlPreview");
+                              setStatus("Selecciona una foto");
                               return setAddPhoto(false);
                             }
                           }}></FaTimes>
@@ -238,6 +242,7 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
                             }
                           }} /> : <FaTimes className="closeIcon" onClick={() => {
                             if (screen.width > 768) {
+                              setDate(false);
                               return setAddDate(false);
                             }
                           }}></FaTimes>
@@ -264,7 +269,8 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData 
         display: "flex",
         alignItems: "flex-start",
         flexWrap: "wrap",
-        justifyContent: "start",
+        justifyContent: "center",
+        maxWidth: "1800px",
       }}>
         {
           coursesData.courses?.map((course) => {

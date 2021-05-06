@@ -5,9 +5,10 @@ import { connect } from "react-redux";
 import Header from "../Header/index.jsx";
 
 function PrivateRoutes({ component: RouteComponent, user, ...rest }) {
+  // console.log(location.pathname);
   return (
     <>
-      { location.pathname !== "/login" && <Header></Header> }
+      { !!user && <Header></Header> }
       <Route
         {...rest}
         render={routeProps =>

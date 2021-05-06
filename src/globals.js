@@ -179,6 +179,19 @@ export const GlobalStyles = createGlobalStyle`
       border-color: transparent #2E2E2E transparent transparent;
   }
 
+  .tiptextSpecial {
+    border-radius: 30px;
+    background-color: #999;
+    padding: 1rem;
+    position: absolute;
+    top: -80px;
+    display: none;
+  }
+
+  .tooltipSpecial {
+    position: relative;
+  }
+
   .custom-file-input::-webkit-file-upload-button {
     visibility: hidden;
   }
