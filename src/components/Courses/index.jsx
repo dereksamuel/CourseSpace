@@ -200,7 +200,7 @@ function Courses({ authenticate, createCourse, getCourses, courses: coursesData,
     })();
     id ? closeFunctionModal() : closeModal();
   };
-
+//TODO: Pending best code
   const handleSetVisible = (value) => setVisible(value);
   const handleChangeFile = (e, otherFile) => {
     if (otherFile) setFilePreviousUpdate(e.target.files[0]);
