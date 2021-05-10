@@ -24,6 +24,19 @@ export const Overlay = styled.div`
 `;
 
 export const ModalContent = styled.section`
+  .iconsModal {
+    display: flex;
+    align-items: center;
+  }
+  .iconsModal svg {
+    background-color: white;
+    padding: 0.2rem;
+    border-radius: 50%;
+    font-size: 1.7rem;
+    margin: 0rem 0.3rem;
+    border: 1px solid;
+    cursor: pointer;
+  }
   background-color: white;
   position: fixed;
   z-index: 10000;

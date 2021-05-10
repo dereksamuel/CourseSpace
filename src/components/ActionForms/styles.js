@@ -23,6 +23,14 @@ export const Form = styled.form`
   & a {
     color: ${vars.color_medium};
   }
+  @media screen and (min-width: 768px) {
+    & {
+      max-width: 433px;
+    }
+    & .normal {
+      padding: 1.3rem 3rem !important;
+    }
+  }
 `;
 
 export const Figure = styled.figure`

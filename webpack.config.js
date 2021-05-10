@@ -15,6 +15,7 @@ module.exports = {
     port: 8085,
     compress: true,
     historyApiFallback: true,
+    host: "192.168.0.3",
   },
   module: {
     rules: [

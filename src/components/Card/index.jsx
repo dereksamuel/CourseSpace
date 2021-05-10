@@ -1,15 +1,18 @@
 import React from "react";
 import { Card } from '../Courses/styles';
 import { Button } from "../styles";
-import { FaEye, FaEdit, FaTrashAlt, FaEllipsisV } from "react-icons/fa";
+import { FaEye, FaEdit, FaTrashAlt, FaEllipsisV, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { notify } from "../../helpers/sendNotifications";
 
-export default function CardComponent({ item, other }) {
+export default function CardComponent({ item, other, setShowModal, setDataModal, setDeleteId }) {
+  let count = 0;
+
   const handleChangeDate = () => {
     if (item.date) {
       const dateNow = new Date(item.date);
       const day = dateNow.getDay()
-      const hours = dateNow.getHours().toLocaleString();
+      let hours = dateNow.getHours().toLocaleString();
       const minutes = dateNow.getMinutes();
       const ampm = hours >= 12 ? 'pm' : 'am';
       var weekday = new Array(7);
@@ -20,25 +23,82 @@ export default function CardComponent({ item, other }) {
       weekday[4] = "jueves";
       weekday[5] = "viernes";
       weekday[6] = "sábado";
+      if (hours > 12) hours = hours - 12;
       return (`Estudia el ${weekday[day]} a las ${hours === 0 ? 12 : hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`);
     }
   }
 
+  const showEdit = (data) => {
+    setShowModal(true);
+    setDataModal(data);
+  };
+
+  const deleteAction = (id) => {
+    setDeleteId(id);
+    setShowModal(true);
+  }
+
   const showTextSpecial = (id) => {
-    const allSpecialText = [
-      ...document.querySelectorAll(".tiptextSpecial")
+    count += 1;
+    const $allSpecialText = [
+      ...document.querySelectorAll(".tiptextSpecial"),
     ];
-    for (const specialtextSingular of allSpecialText) {
+    const allIcons = [
+      ...document.querySelectorAll(".icon"),
+    ];
+    const allTimes = [
+      ...document.querySelectorAll(".times"),
+    ];
+    const allEllipsis = [
+      ...document.querySelectorAll(".ellipsis"),
+    ];
+    const $specialText = document.querySelector(`#tip_id${id}`);
+
+    const $iconFirst = document.querySelector(`#icon_id${id}_first`);
+    const $iconSecond = document.querySelector(`#icon_id${id}_second`);
+    const $iconThree = document.querySelector(`#icon_id${id}_three`);
+
+    const $closeButton = document.querySelector(`#refClose_id${item.id}`);
+    const $ellipsisButton = document.querySelector(`#refEllipsis_id${item.id}`);
+  
+    for (const $specialtextSingular of $allSpecialText) {
       //TODO: Aquí eliminar los tooltips abiertos, y solo dejar uno
+      $specialtextSingular.style = "";
     }
-    const specialText = document.querySelector(`#tip_id${id}`);
-    specialText.style = "display: initial;";
+
+    for (const $icons of allIcons) {
+      if (count === 2) {
+        $closeButton.style = "display: none;";
+        $ellipsisButton.style = "display: block;";
+        count = 0;
+      }
+      $icons.style = "";
+    }
+
+    for (const $time of allTimes) {
+      $time.style = "display: none;";
+    }
+
+    for (const $ellipsis of allEllipsis) {
+      $ellipsis.style = "display: block;";
+    }
+    
+    if (count === 1) {
+      console.log(22);
+      $closeButton.style = "display: block;";
+      $ellipsisButton.style = "display: none;";
+      
+      $specialText.style = "display: initial;";
+      $iconFirst.style = "opacity: 1;";
+      $iconSecond.style = "opacity: 1;";
+      $iconThree.style = "opacity: 1;";
+    }
   };
 
   return (
     <Card>
       <p style={{ textAlign: "center", marginBottom: "0.5rem", marginTop: "-0.5rem", fontStyle: "italic", }}>{ handleChangeDate() }</p>
-      <img data-src={item?.photoURL} className="carousel-item__img" src={"https://img.icons8.com/ios-glyphs/90/ffffff/cactus-in-pot.png"} alt={item.fullname} style={!item?.photoURL ? { objectFit: "scale-down", } : {}} />
+      <img data-src={item?.photoURL || "https://img.icons8.com/ios-glyphs/90/ffffff/cactus-in-pot.png"} className="carousel-item__img" src={"https://img.icons8.com/ios-glyphs/90/ffffff/cactus-in-pot.png"} alt={item.fullname} style={!item?.photoURL ? { objectFit: "scale-down", } : {}} />
       <p className="Title">{item.fullname}</p>
       <p>{item?.description || "No hay descripción"}</p>
       <Link to={`work/${item.id}`}>
@@ -53,16 +113,19 @@ export default function CardComponent({ item, other }) {
       </Link>
       <div className="actions">
         <i className="tooltip top">
-          <div className="icon"><FaEdit></FaEdit></div>
+          <div className="icon" id={`icon_id${item.id}_first`} onClick={() => showEdit(item)}><FaEdit></FaEdit></div>
         </i>
         <i className="tooltip top">
-          <div className="icon"><FaTrashAlt></FaTrashAlt></div>
+          <div className="icon" id={`icon_id${item.id}_second`} onClick={() => deleteAction(item.id)}><FaTrashAlt></FaTrashAlt></div>
         </i>
         <i className="tooltipSpecial topSpecial">
-          <div className="icon" onClick={() => showTextSpecial(item.id)}><FaEllipsisV></FaEllipsisV></div>
+          <div className="icon" id={`icon_id${item.id}_three`} onClick={() => showTextSpecial(item.id)}>
+            <FaTimes id={`refClose_id${item.id}`} className="times" style={{ display: "none", }}></FaTimes>
+            <FaEllipsisV id={`refEllipsis_id${item.id}`} className="ellipsis"></FaEllipsisV>
+          </div>
           <span className="tiptextSpecial" id={`tip_id${item.id}`}>
             <p>Analíticas</p>
-            <p>Notificarme</p>
+            <p onClick={() => notify("CourseSpace", `Es hora de estudiar con ${item.fullname}`)}>Notificarme</p>
           </span>
         </i>
       </div>

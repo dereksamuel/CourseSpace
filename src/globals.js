@@ -182,10 +182,23 @@ export const GlobalStyles = createGlobalStyle`
   .tiptextSpecial {
     border-radius: 30px;
     background-color: #999;
+    color: white;
+    text-align: center;
     padding: 1rem;
     position: absolute;
     top: -80px;
     display: none;
+    transition: 0.5s all;
+    right: -32px;
+    font-style: normal;
+  }
+
+  .tiptextSpecial p {
+    padding: 0.1rem;
+  }
+
+  .tiptextSpecial p:nth-child(1) {
+    border-bottom: 1px solid;
   }
 
   .tooltipSpecial {
@@ -225,6 +238,37 @@ export const GlobalStyles = createGlobalStyle`
     object-position: center;
   }
 
+  .ulListCards {
+    padding: 0 2rem;
+  }
+
+  .custom-file::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .custom-file::before {
+    content: ${({ content = 'Selecciona una foto' }) => `"${content}"`};
+    transition: background 1s all;
+    display: inline-block;
+    background: linear-gradient(0deg, ${vars.color_semidark} 0%, ${vars.color_dark} 100%);
+    border: 1px solid #999;
+    border-radius: 10px;
+    padding: 5px 8px;
+    outline: none;
+    border: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 10pt;
+    color: white;
+  }
+  .custom-file:hover::before {
+    border: none;
+  }
+  .custom-file:active::before {
+    background: linear-gradient(0deg, ${vars.color_dark} 0%, ${vars.color_semidark} 100%);
+  }
+
   @media screen and (min-width: 768px) {
     .Header_2 {
       & img {
@@ -236,6 +280,12 @@ export const GlobalStyles = createGlobalStyle`
   @media screen and (max-width: 850px) {
     .ulListCards {
       justify-content: center !important;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .ulListCards {
+      padding: 0 0.2rem;
     }
   }
 `;

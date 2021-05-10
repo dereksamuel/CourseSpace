@@ -215,7 +215,7 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
                     <a href="#" onClick={() => setShowMe(true)}>¿olvidó su contraseña?</a>
                   </div>
                   <div className="center_container">
-                    <Button padding="1.5rem" size_f="1.4rem" type="submit" onClick={loginAction}>{ error ? error : loading ? "Cargando" : "Iniciar Sesión" }</Button>
+                    <Button padding="1.5rem" size_f="1.4rem" className="normal" type="submit" onClick={loginAction}>{ error ? error : loading ? "Cargando" : "Iniciar Sesión" }</Button>
                     <Button
                       padding="1rem"
                       size_f="1rem"
@@ -227,7 +227,7 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
                   <Subtitle background="white">
                     <p>O inica sesión aquí</p>
                   </Subtitle>
-                  <Button padding="1.5rem" size_f="1.4rem" onClick={loginActionGoogle} type="button">Con Google</Button>
+                  <Button padding="1.5rem" size_f="1.4rem" onClick={loginActionGoogle} type="button" className="normal">Con Google</Button>
                 </section>
                 :
                 <section className="Register">
@@ -255,7 +255,7 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
                     <i>{iconpos}</i>
                   </Input>
                   <div className="center_container">
-                    <Button type="submit" padding="1.5rem" size_f="1.4rem" onClick={registerAction} disabled={!email || !password || !name}>{error ? error : loading ? "Cargando" : "Registrarse"}</Button>
+                    <Button type="submit" className="normal" padding="1.5rem" size_f="1.4rem" onClick={registerAction} disabled={!email || !password || !name}>{error ? error : loading ? "Cargando" : "Registrarse"}</Button>
                     <Button
                       padding="1rem"
                       size_f="1rem"
@@ -267,7 +267,7 @@ function ActionForms({ register = false, iconpre, iconpos, history, user }) {
                   <Subtitle background="white">
                     <p>O regístrate aquí</p>
                   </Subtitle>
-                  <Button padding="1.5rem" size_f="1.4rem" onClick={loginActionGoogle} type="button">Con Google</Button>
+                  <Button padding="1.5rem" size_f="1.4rem" onClick={loginActionGoogle} type="button" className="normal">Con Google</Button>
                 </section>
             }
           </CSSTransition>

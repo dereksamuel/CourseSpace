@@ -26,6 +26,7 @@ export const Form = styled.form`
     width: 300px;
     height: 30px;
     color: #665959;
+    max-width: 100%;
   }
   .datepicker-toggle p {
     display: inline-block;
@@ -36,9 +37,10 @@ export const Form = styled.form`
     text-align: center;
   }
   .datepicker-toggle-button {
-    position: absolute;
+    /* position: absolute;
     left: 0;
-    top: 0;
+    top: 0; */
+    display: flex;
     width: 100%;
     height: 100%;
   }
@@ -102,31 +104,10 @@ export const Form = styled.form`
     width: 100%;
     resize: none;
   }
-  .custom-file::-webkit-file-upload-button {
-    visibility: hidden;
-  }
-  .custom-file::before {
-    content: ${({ content = 'Selecciona una foto' }) => `"${content}"`};
-    transition: background 1s all;
-    display: inline-block;
-    background: linear-gradient(0deg, ${vars.color_semidark} 0%, ${vars.color_dark} 100%);
-    border: 1px solid #999;
-    border-radius: 10px;
-    padding: 5px 8px;
-    outline: none;
-    border: none;
-    white-space: nowrap;
-    -webkit-user-select: none;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 10pt;
-    color: white;
-  }
-  .custom-file:hover::before {
-    border: none;
-  }
-  .custom-file:active::before {
-    background: linear-gradient(0deg, ${vars.color_dark} 0%, ${vars.color_semidark} 100%);
+  @media screen and (max-width: 500px) {
+    .datepicker-toggle p {
+      font-size: 0.7rem;
+    }
   }
 `;
 
@@ -197,6 +178,17 @@ export const Button = styled.button`
           color: #A7AE40;
           &:hover {
             box-shadow: 0px 0px 15px ${vars.color_success_txt};
+            transition: 1s all box-shadow;
+          }
+        `;
+      case "danger":
+        return `
+          background: linear-gradient(0deg, ${vars.color_light} 0%, ${vars.color_semidark} 100%);
+          border: 1px;
+          border-radius: 31px;
+          color: ${vars.color_white};
+          &:hover {
+            box-shadow: 0px 0px 15px ${vars.color_dark};
             transition: 1s all box-shadow;
           }
         `;

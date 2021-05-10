@@ -4,7 +4,7 @@ import { FaTimes } from "react-icons/fa";
 import "./styles.css";
 import { Button } from "../styles";
 
-export default function Modal({ showMe, setShowMe, children, title, buttons, secondButton }) {
+export default function Modal({ showMe, setShowMe, children, title, buttons, secondButton, closeFunctionModal }) {
   const closeModal = () => {
     const overlay = document.querySelector("#overlay");
     const modal = document.querySelector("#modal");
@@ -20,20 +20,22 @@ export default function Modal({ showMe, setShowMe, children, title, buttons, sec
       <div>
         {
           showMe && <>
-            <Overlay onClick={closeModal} id="overlay">
+            <Overlay onClick={closeFunctionModal || closeModal} id="overlay">
             </Overlay>
             <ModalContent id="modal">
               <div className="containerClose">
-                <div className="closeIcon" onClick={closeModal}><FaTimes></FaTimes></div>
+                <div className="closeIcon" onClick={closeFunctionModal || closeModal}><FaTimes></FaTimes></div>
               </div>
-              <div className="containerTitle">
-                <p>{title && title}</p>
-              </div>
+              {
+                title && <div className="containerTitle">
+                  <p>{title}</p>
+                </div>
+              }
               {children}
               {
                 buttons && <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", }}>
                   <div style={{ paddingTop: "1rem", }}>
-                    <Button variant="gray" onClick={closeModal} size_f="1rem" padding="0.8rem 1.5rem">Cancelar</Button>
+                    <Button variant="gray" onClick={closeFunctionModal || closeModal} size_f="1rem" padding="0.8rem 1.5rem">Cancelar</Button>
                   </div>
                   <div style={{ paddingTop: "1rem", transition: "1s", }}>{secondButton}</div>
                 </div>

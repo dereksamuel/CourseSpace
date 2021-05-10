@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import vars from "../vars";
 
 export const Card = styled.div`
   background: #ebebeb;
@@ -59,6 +60,34 @@ export const Card = styled.div`
   .icon:focus, .icon:active {
     background: #b8b9b9;
   }
+`;
+
+export const InputInvisible = styled.input`
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  outline: none;
+  color: gray;
+`;
+
+export const InputAddCourse = styled.input`
+  cursor: pointer;
+  ${({ success }) => success ? `
+    backgroun-color: ${vars.color_success_bg};
+    color: ${vars.color_success_txt};
+  ` : ""}
+`;
+
+export const TextareaInvisible = styled.textarea`
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  outline: none;
+  color: gray;
+  resize: none;
+  width: 100%;
+  min-height: 101px;
+  font-family: 'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 `;
 
 export const Close = styled.div`

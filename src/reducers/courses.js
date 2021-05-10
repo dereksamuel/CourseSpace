@@ -3,6 +3,8 @@ const INITIAL_STATE = {
   lastCourse: undefined,
   error: null,
   loading: true,
+  updatedCourse: null,
+  deletedCourse: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -11,6 +13,16 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         lastCourse: action.payload,
+      }
+    case "update_course":
+      return {
+        ...state,
+        updatedCourse: action.payload,
+      }
+    case "delete_course":
+      return {
+        ...state,
+        deletedCourse: action.payload,
       }
     case "set_loading":
       return {
