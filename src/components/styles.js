@@ -7,6 +7,7 @@ export const Form = styled.form`
   border-radius: 16px;
   border: 1px solid #b1b1b1;
   margin-top: 2rem;
+  transition: 1s height;
   i svg {
     color: rgb(156 156 156);
     background-color: rgb(235 235 235);
@@ -139,6 +140,13 @@ export const Subtitle = styled.div`
   & p {
     background: ${(props) => props.background};
     padding: 1rem;
+    font-weight: normal;
+  }
+
+  & h2 {
+    background: ${(props) => props.background};
+    padding: 1rem;
+    font-weight: normal;
   }
 `;
 

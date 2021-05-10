@@ -15,11 +15,11 @@ export const GlobalStyles = createGlobalStyle`
     scroll-behavior: smooth;
   }
 
-  [type="checkbox"] {
+  [type="checkbox"], [type="radio"] {
     opacity: 0;
   }
 
-  [type="checkbox"] + label {
+  [type="checkbox"] + label, [type="radio"] + label {
     position: relative;
     padding-left: 30px;
     cursor: pointer;
@@ -30,7 +30,7 @@ export const GlobalStyles = createGlobalStyle`
     transition: 1s background;
   }
 
-  [type="checkbox"] + label::before {
+  [type="checkbox"] + label::before, [type="radio"] + label::before {
     content: "";
     position: absolute;
     left: 0px;
@@ -42,7 +42,7 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 10px;
   }
 
-  [type="checkbox"]:checked + label::before {
+  [type="checkbox"]:checked + label::before, [type="radio"]:checked + label::before {
     content: "";
     position: absolute;
     left: 0px;
@@ -54,7 +54,7 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 10px;
   }
 
-  [type="checkbox"]:checked + label::after {
+  [type="checkbox"]:checked + label::after, [type="radio"]:checked + label::after {
     content: "";
     position: absolute;
     left: 0px;

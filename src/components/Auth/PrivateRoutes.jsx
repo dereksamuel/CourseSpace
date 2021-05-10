@@ -2,13 +2,10 @@ import React from 'react';
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import Header from "../Header/index.jsx";
-
 function PrivateRoutes({ component: RouteComponent, user, ...rest }) {
-  // console.log(location.pathname);
+  console.log(user);
   return (
     <>
-      { !!user && <Header></Header> }
       <Route
         {...rest}
         render={routeProps =>
