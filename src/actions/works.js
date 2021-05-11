@@ -38,6 +38,24 @@ export const updateWork = (toSave, id) => async (dispatch) => {
   }
 };
 
+export const deleteWork = (id) => async (dispatch) => {
+  if (!id) return new Promise.reject("Lo sentimos, es necesario el id");
+  try {
+    const response = await db.collection("courses").doc(`${id}`).delete();
+    dispatch({
+      type: "delete_course",
+      payload: response,
+    });
+  } catch (error) {
+    console.error(error);
+    dispatch({
+      type: "error",
+      payload: error,
+    });
+    return;
+  }
+};
+
 export const getWorks = () => (dispatch) => {
   return db.collection("works")
   .where("uid", "==", fb.auth().currentUser.uid)
