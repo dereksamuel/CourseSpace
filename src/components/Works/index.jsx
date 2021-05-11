@@ -12,7 +12,6 @@ import fb, { storage } from "../../helpers/firebase_config";
 function Works({ authenticate, createWork, works: worksData, getWorks, updateWork }) {
   const [percent, setPercent] = useState("100%");
   const [visible, setVisible] = useState(true);
-  const refUpdate = useRef(null);
   const ref = useRef(null);
   const worksCompleted = worksData?.works?.filter((work) => work.completeWork);
   let toSave = {
@@ -40,7 +39,6 @@ function Works({ authenticate, createWork, works: worksData, getWorks, updateWor
       }
     } else {
       const title = document.querySelector(`#refTitle${id}`);
-      console.log(title.textContent);
       toSave = {
         ...toSave,
         title: title.textContent,
