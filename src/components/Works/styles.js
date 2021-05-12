@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import vars from "../vars";
 
+let timeout;
+
 export const ProgressBar = styled.div`
   display: flex;
   justify-content: space-between;
@@ -17,9 +19,13 @@ export const ProgressBar = styled.div`
     align-items: center;
     border: 1px solid gray;
     transition: 1s all;
-  }
-  .active {
-    background-color: ${vars.color_success_bg};
+    ${({ percent }) => percent === "100%" ? () => {
+      timeout = setTimeout(() => {
+        clearTimeout(timeout);
+        return `transform: scale(1); background-color: ${vars.color_success_bg};`;
+      }, 3000);
+      return `transform: scale(1.05); background-color: ${vars.color_success_bg};`;
+    } : ""}
   }
   .progressbar {
     background-color: #c8ffa0;
@@ -29,6 +35,7 @@ export const ProgressBar = styled.div`
     height: 11px;
     justify-self: flex-start;
     position: relative;
+    transition: 0.5s all;
     p {
       position: absolute;
       left: 50%;
@@ -44,6 +51,7 @@ export const ProgressBar = styled.div`
 `;
 
 export const WorksCss = styled.section `
+  margin-bottom: 1rem;
   .WorksArea {
     img {
       max-width: 500px;
@@ -58,9 +66,15 @@ export const WorksCss = styled.section `
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin: 1rem auto;
+    margin: 1.5rem auto;
     .icons_item {
       font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      svg {
+        margin: 0 0.5rem;
+      }
     }
   }
 `;
